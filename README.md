@@ -3,7 +3,7 @@
 افزونه‌ای برای بهبود نمایش متون فارسی در وب‌سایت‌ها با تغییر جهت نوشتار به راست-به-چپ (RTL) و تبدیل فونت به «وزیرمتن».
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Browser](https://img.shields.io/badge/browser-Chrome-green))
+![Browser](https://img.shields.io/badge/browser-Chrome-green)
 
 ## امکانات
 
