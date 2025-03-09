@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Vazirmatn Font Changer and RTL",
+  "version": "1.0",
+  "description": "Change Persian font to Vazirmatn and force RTL alignment on enabled sites",
+  "author": "Tabassom Argi",
+  "homepage_url": "https://github.com/tabassomargi",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/Vazirmatn-Regular.woff2"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
