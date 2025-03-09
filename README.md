@@ -2,8 +2,8 @@
 
 افزونه‌ای برای بهبود نمایش متون فارسی در وب‌سایت‌ها با تغییر جهت نوشتار به راست-به-چپ (RTL) و تبدیل فونت به «وزیرمتن».
 
-![نسخه](https://img.shields.io/badge/نسخه-1.0.0-blue)
-![مرورگر](https://img.shields.io/badge/مرورگر-Chrome-green)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Browser](https://img.shields.io/badge/browser-Chrome-green))
 
 ## امکانات
 
@@ -47,8 +47,8 @@
 ## حمایت از پروژه
 
 آدرس ولت‌های زیر برای حمایتهای مالی شما در دسترس است:
-Lightning: Tabassom@coinos.io
-BTC: bc1qvkfkda5kccgzkh3np4k3zr55wzmvhtakwa228y
+- Lightning: Tabassom@coinos.io
+- BTC: bc1qvkfkda5kccgzkh3np4k3zr55wzmvhtakwa228y
 
 ---
 # English
