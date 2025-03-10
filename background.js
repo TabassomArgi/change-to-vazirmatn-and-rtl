@@ -26,18 +26,32 @@ function checkAndApplyStyles(tabId, url) {
       const isEnabled = enabledSites.includes(hostname);
       
       // ارسال وضعیت به popup برای به‌روزرسانی تیک باکس
-      chrome.runtime.sendMessage({
-        action: "updateCheckbox",
-        hostname: hostname,
-        isEnabled: isEnabled
-      });
+      try {
+        chrome.runtime.sendMessage({
+          action: "updateCheckbox",
+          hostname: hostname,
+          isEnabled: isEnabled
+        }).catch(err => {
+          // خطای ارتباط را نادیده بگیرید - احتمالاً پاپ‌آپ باز نیست
+        });
+      } catch (err) {
+        // نادیده گرفتن خطا - پاپ‌آپ احتمالاً باز نیست
+      }
       
       if (isEnabled) {
-        // اعمال CSS فقط در صورتی که سایت در لیست فعال‌ها باشد
-        chrome.scripting.insertCSS({
-          target: { tabId: tabId },
-          files: ['content.css']
-        }).catch(err => console.error('Error inserting CSS:', err));
+        // برای توییتر از اسکریپت خاص استفاده می‌کنیم
+        if (hostname === "twitter.com" || hostname === "x.com") {
+          chrome.scripting.executeScript({
+            target: { tabId: tabId },
+            files: ['twitter-specific.js']
+          }).catch(err => console.error('Error executing script:', err));
+        } else {
+          // برای سایر سایت‌ها از CSS عمومی استفاده می‌کنیم
+          chrome.scripting.insertCSS({
+            target: { tabId: tabId },
+            files: ['content.css']
+          }).catch(err => console.error('Error inserting CSS:', err));
+        }
       }
     });
   } catch (error) {
@@ -77,14 +91,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         // بعد از ذخیره، استایل ها را مجدداً اعمال کنید
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           if (tabs[0]) {
-            checkAndApplyStyles(tabs[0].id, tabs[0].url);
+            const hostname = new URL(tabs[0].url).hostname;
             
-            // اگر سایت فعال شده، CSS را اعمال کنید، در غیر این صورت تب را ریلود کنید تا CSS حذف شود
             if (message.enable) {
-              chrome.scripting.insertCSS({
-                target: { tabId: tabs[0].id },
-                files: ['content.css']
-              }).catch(err => console.error('Error inserting CSS:', err));
+              // برای توییتر از اسکریپت خاص استفاده می‌کنیم
+              if (hostname === "twitter.com" || hostname === "x.com") {
+                chrome.scripting.executeScript({
+                  target: { tabId: tabs[0].id },
+                  files: ['twitter-specific.js']
+                }).catch(err => console.error('Error executing script:', err));
+              } else {
+                // برای سایر سایت‌ها از CSS عمومی استفاده می‌کنیم
+                chrome.scripting.insertCSS({
+                  target: { tabId: tabs[0].id },
+                  files: ['content.css']
+                }).catch(err => console.error('Error inserting CSS:', err));
+              }
             } else {
               chrome.tabs.reload(tabs[0].id);
             }
@@ -112,4 +134,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
     return true; // برای نگه داشتن کانال پیام رسانی باز برای sendResponse غیرهمزمان
   }
+});
+
+// اضافه کردن مدیریت خطا برای زمانی که افزونه غیرفعال می‌شود
+chrome.runtime.onSuspend.addListener(() => {
+  console.log("Extension is being unloaded");
+  // انجام پاکسازی‌های لازم
 });
